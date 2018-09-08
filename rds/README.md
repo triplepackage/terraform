@@ -214,3 +214,45 @@ PING ec2-34-239-30-93.compute-1.amazonaws.com (34.239.30.93): 56 data bytes
 Test Connectivity Using SQL Client
 ![Alt text](images/image005.jpg?raw=true "AWS")
 
+## Finally, Terraform Destroy
+
+<pre>
+Johns-MBP:rds admin$ terraform destroy
+Do you really want to destroy?
+  Terraform will delete all your managed infrastructure.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+aws_security_group.rental-mysql: Refreshing state... (ID: sg-077dd742cc77d9edf)
+aws_db_instance.rental-mysql: Refreshing state... (ID: terraform-0000b5ceb46183d84557aa5c0a)
+aws_db_instance.rental-mysql: Destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 10s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 20s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 30s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 40s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 50s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m0s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m10s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m20s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m30s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m40s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 1m50s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m0s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m10s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m20s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m30s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m40s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 2m50s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m0s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m10s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m20s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m30s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m40s elapsed)
+aws_db_instance.rental-mysql: Still destroying... (ID: terraform-0000b5ceb46183d84557aa5c0a, 3m50s elapsed)
+aws_db_instance.rental-mysql: Destruction complete
+aws_security_group.rental-mysql: Destroying... (ID: sg-077dd742cc77d9edf)
+aws_security_group.rental-mysql: Destruction complete
+
+Destroy complete! Resources: 2 destroyed.
+</pre>
