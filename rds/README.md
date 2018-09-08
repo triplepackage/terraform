@@ -5,7 +5,7 @@ Create root password environment variable
 Johns-MBP:rds admin$ export TF_VAR_mysql_password=xxxxx
 </pre>
 
-Terraform Plan
+## Terraform Plan
 <pre>
 Johns-MBP:rds admin$ terraform plan
 Refreshing Terraform state in-memory prior to plan...
@@ -91,7 +91,7 @@ Plan: 2 to add, 0 to change, 0 to destroy.
 
 </pre>
 
-Terraform Apply
+## Terraform Apply
 
 <pre>
 Johns-MBP:rds admin$ terraform apply
@@ -197,9 +197,20 @@ State path:
 
 </pre>
 
-Verify Successful creation in AWS Console
+## Verify Successful creation in AWS Console
 ![Alt text](images/image004.jpg?raw=true "AWS")
 ![Alt text](images/image003.jpg?raw=true "AWS")
 ![Alt text](images/image002.jpg?raw=true "AWS")
 ![Alt text](images/image001.jpg?raw=true "AWS")
+
+## Verify Connection
+
+Get IP Address of Instance
+<pre>
+Johns-MBP:rds admin$ ping terraform-0000b5ceb46183d84557aa5c0a.ctizdrqu7wwf.us-east-1.rds.amazonaws.com
+PING ec2-34-239-30-93.compute-1.amazonaws.com (34.239.30.93): 56 data bytes
+</pre>
+
+Test Connectivity Using SQL Client
+![Alt text](images/image005.jpg?raw=true "AWS")
 
