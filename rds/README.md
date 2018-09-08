@@ -196,3 +196,10 @@ use the `terraform show` command.
 State path: 
 
 </pre>
+
+Verify Successful creation in AWS Console
+![Alt text](images/image004.jpg?raw=true "AWS")
+![Alt text](images/image003.jpg?raw=true "AWS")
+![Alt text](images/image002.jpg?raw=true "AWS")
+![Alt text](images/image001.jpg?raw=true "AWS")
+
