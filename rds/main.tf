@@ -1,3 +1,5 @@
+variable "mysql_password" {}
+
 resource "aws_db_instance" "rental-mysql" {
   allocated_storage    = 10
   storage_type         = "gp2"
@@ -6,10 +8,12 @@ resource "aws_db_instance" "rental-mysql" {
   instance_class       = "db.t2.micro"
   name                 = "mydb"
   username             = "root"
-  password             = "XXXXXX"
+  password             = "${var.mysql_password}"
   parameter_group_name = "default.mysql5.7"
   port                     = 3306
   publicly_accessible      = true
+  skip_final_snapshot = true
+  vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}"]
 }
 
 resource "aws_security_group" "rental-mysql" {
