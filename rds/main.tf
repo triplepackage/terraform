@@ -1,12 +1,10 @@
-variable "mysql_password" {}
-
 resource "aws_db_instance" "rental-mysql" {
   allocated_storage    = 10
   storage_type         = "gp2"
   engine               = "mysql"
   engine_version       = "5.7"
   instance_class       = "db.t2.micro"
-  name                 = "mydb"
+  name                 = "rental"
   username             = "root"
   password             = "${var.mysql_password}"
   parameter_group_name = "default.mysql5.7"
@@ -14,31 +12,6 @@ resource "aws_db_instance" "rental-mysql" {
   publicly_accessible      = true
   skip_final_snapshot = true
   vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}"]
-}
-
-resource "aws_security_group" "rental-mysql" {
-  name = "rental-mysql"
-
-  description = "RDS MySql servers (terraform-managed)"
-  vpc_id = "${var.rds_vpc_id}"
-
-  ingress {
-    from_port   = "3306"
-    to_port     = "3306"
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 variable "rds_vpc_id" {
