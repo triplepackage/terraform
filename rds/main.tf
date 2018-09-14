@@ -7,19 +7,20 @@ resource "aws_db_instance" "rental-mysql" {
   name                 = "rental"
   username             = "root"
   password             = "${var.mysql_password}"
+  db_subnet_group_name = "${aws_db_subnet_group.rds-subnet.name}"
   parameter_group_name = "default.mysql5.7"
   port                     = 3306
   publicly_accessible      = true
   skip_final_snapshot = true
   vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}"]
+
+  tags{
+    Name = "RDS Instance"
+  }
 }
 
-variable "rds_vpc_id" {
-  default = "vpc-c75340a3"
-  description = "Our default RDS virtual private cloud (rds_vpc)."
-}
-
-variable "rds_public_subnets" {
-  default = "vpc-c75340a3"
-  description = "The public subnets of our RDS VPC rds-vpc."
+resource "aws_db_subnet_group" "rds-subnet" {
+    name = "rds-subnet"
+    description = "RDS subnet group"
+    subnet_ids = ["${aws_subnet.main-public-1.id}", "${aws_subnet.main-public-2.id}"]
 }
