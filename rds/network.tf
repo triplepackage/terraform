@@ -5,82 +5,67 @@ provider "aws" {
 }
 
 resource "aws_vpc" "default" {
-  cidr_block           = "${var.vpcCIDRblock}"
-  instance_tenancy     = "${var.instanceTenancy}"
-  enable_dns_support   = "${var.dnsSupport}"
-  enable_dns_hostnames = "${var.dnsHostNames}"
-tags {
+  cidr_block           = "${var.vpc_cidr_block}"
+  instance_tenancy     = "${var.instance_tenancy}"
+  enable_dns_support   = "${var.dns_support}"
+  enable_dns_hostnames = "${var.dns_host_names}"
+  tags {
     Name = "Default VPC"
   }
 }
 
-resource "aws_subnet" "main-public-1" {
+resource "aws_subnet" "public_subnet" {
   vpc_id                  = "${aws_vpc.default.id}"
-  cidr_block              = "${var.subnetCIDRblock}"
-  map_public_ip_on_launch = "${var.mapPublicIP}"
+  cidr_block              = "${var.subnet_cidr_block}"
+  map_public_ip_on_launch = "${var.map_public_ip}"
   availability_zone       = "${var.availability_zone_main}"
+  map_public_ip_on_launch = "true"
   tags = {
-    Name = "Default VPC Public Subnet"
+    Name = "VPC Public Subnet"
   }
 }
 
-resource "aws_subnet" "main-public-2" {
+resource "aws_subnet" "private_subnet" {
     vpc_id = "${aws_vpc.default.id}"
     cidr_block = "10.0.2.0/24"
     map_public_ip_on_launch = "true"
     availability_zone = "${var.availability_zone_alternate}"
+    map_public_ip_on_launch = "true"
     tags {
-        Name = "Alternate VPC Public Subnet"
+        Name = "VPC Private Subnet"
     }
 }
 
-resource "aws_security_group" "default" {
-  vpc_id       = "${aws_vpc.default.id}"
-  name         = "Default VPC Security Group"
-  description  = "Default VPC Security Group"
-  ingress {
-  cidr_blocks = "${var.ingressCIDRblock}"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-  }
-tags = {
-        Name = "Default VPC Security Group"
-  }
+resource "aws_db_subnet_group" "rds-subnet" {
+    description = "RDS subnet group"
+    subnet_ids = ["${aws_subnet.public_subnet.id}", "${aws_subnet.private_subnet.id}"]
+    tags = {
+      Name = "RDS DB Subnet Group"
+    }
 }
+
 resource "aws_network_acl" "default" {
   vpc_id = "${aws_vpc.default.id}"
-  subnet_ids = [ "${aws_subnet.main-public-1.id}" ]
-# allow port 22
+  subnet_ids = [ "${aws_subnet.public_subnet.id}" ]
+
   ingress {
-    protocol   = "tcp"
+      protocol   = "all"
     rule_no    = 100
     action     = "allow"
-    cidr_block = "${var.destinationCIDRblock}"
-    from_port  = 22
-    to_port    = 22
+    cidr_block = "${var.destination_cidr_block}"
+    from_port  = 0
+    to_port    = 0
   }
 
-# allow ingress ephemeral ports
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "${var.destinationCIDRblock}"
-    from_port  = 1024
-    to_port    = 65535
-  }
-
-# allow egress ephemeral ports
   egress {
-    protocol   = "tcp"
+    protocol   = "all"
     rule_no    = 100
     action     = "allow"
-    cidr_block = "${var.destinationCIDRblock}"
-    from_port  = 1024
-    to_port    = 65535
+    cidr_block = "${var.destination_cidr_block}"
+    from_port  = 0
+    to_port    = 0
   }
-tags {
+  tags {
     Name = "Default VPC ACL"
   }
 }
@@ -92,20 +77,32 @@ resource "aws_internet_gateway" "default" {
   }
 }
 
-resource "aws_route_table" "default" {
+resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.default.id}"
   tags {
-    Name = "Default VPC Route Table"
+    Name = "Public VPC Route Table"
+  }
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = "${aws_vpc.default.id}"
+  tags {
+    Name = "Private VPC Route Table"
   }
 }
 
 resource "aws_route" "default" {
-  route_table_id        = "${aws_route_table.default.id}"
-  destination_cidr_block = "${var.destinationCIDRblock}"
+  route_table_id        = "${aws_route_table.public.id}"
+  destination_cidr_block = "${var.destination_cidr_block}"
   gateway_id             = "${aws_internet_gateway.default.id}"
 }
 
-resource "aws_route_table_association" "default" {
-    subnet_id      = "${aws_subnet.main-public-1.id}"
-    route_table_id = "${aws_route_table.default.id}"
+resource "aws_route_table_association" "route_association_1" {
+  subnet_id      = "${aws_subnet.public_subnet.id}"
+  route_table_id = "${aws_route_table.public.id}"
+}
+
+resource "aws_route_table_association" "route_association_2" {
+  subnet_id      = "${aws_subnet.private_subnet.id}"
+  route_table_id = "${aws_route_table.private.id}"
 }

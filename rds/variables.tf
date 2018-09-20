@@ -12,35 +12,35 @@ variable "availability_zone_alternate" {
   default = "us-east-1b"
 }
 
-variable "instanceTenancy" {
+variable "instance_tenancy" {
   default = "default"
 }
 
-variable "dnsSupport" {
+variable "dns_support" {
   default = true
 }
 
-variable "dnsHostNames" {
+variable "dns_host_names" {
   default = true
 }
 
-variable "vpcCIDRblock" {
+variable "vpc_cidr_block" {
   default = "10.0.0.0/16"
 }
 
-variable "subnetCIDRblock" {
+variable "subnet_cidr_block" {
   default = "10.0.1.0/24"
 }
 
-variable "destinationCIDRblock" {
+variable "destination_cidr_block" {
   default = "0.0.0.0/0"
 }
 
-variable "ingressCIDRblock" {
+variable "ingress_cidr_block" {
   type = "list"
   default = [ "0.0.0.0/0" ]
 }
 
-variable "mapPublicIP" {
+variable "map_public_ip" {
   default = true
 }
