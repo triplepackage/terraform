@@ -1,5 +1,5 @@
 resource "aws_security_group" "rental-mysql" {
-  description = "Rental Database VPC Security Group"
+  description = "Rental Database Security Group"
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {
@@ -7,6 +7,7 @@ resource "aws_security_group" "rental-mysql" {
     to_port     = "3306"
     protocol    = "tcp"
     cidr_blocks = "${var.ingress_cidr_block}"
+    security_groups = ["${aws_security_group.load_balancer.id}"]
   }
 
   egress {
@@ -21,12 +22,12 @@ resource "aws_security_group" "rental-mysql" {
   }
 
   tags {
-    Name = "Rental Database VPC Security Group"
+    Name = "Rental Database Security Group"
   }
 }
 
 resource "aws_security_group" "rental-ecs-restservice" {
-  description = "Rental ECS REST Service VPC Security Group"
+  description = "Rental REST Service Security Group"
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {
@@ -48,6 +49,6 @@ resource "aws_security_group" "rental-ecs-restservice" {
   }
 
   tags {
-    Name = "Rental ECS REST Service VPC Security Group"
+    Name = "Rental REST Service Security Group"
   }
 }
