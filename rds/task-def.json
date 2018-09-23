@@ -1,0 +1,32 @@
+[{
+	"name": "rental-services-api-jpa-stage",
+	"image": "002609254882.dkr.ecr.us-east-1.amazonaws.com/staging:latest",
+	"logConfiguration": {
+		"logDriver": "awslogs",
+		"options": {
+			"awslogs-group": "/ecs/rental-services-api-jpa-stage",
+			"awslogs-region": "us-east-1",
+			"awslogs-stream-prefix": "ecs"
+		}
+	},
+	"portMappings": [{
+		"containerPort": 8080,
+		"hostPort": 8080,
+		"protocol": "tcp"
+	}],
+	"environment": [{
+			"name": "SPRING_DATASOURCE_PASSWORD",
+			"value": "*****"
+		},
+		{
+			"name": "SPRING_DATASOURCE_URL",
+			"value": "jdbc:mysql://18.213.129.89:3306/rental?useSSL=false"
+		},
+		{
+			"name": "SPRING_DATASOURCE_USERNAME",
+			"value": "root"
+		}
+	],
+	"memoryReservation": 512,
+	"essential": true
+}]
