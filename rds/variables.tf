@@ -20,6 +20,10 @@ variable "dns_support" {
   default = true
 }
 
+variable "map_public_ip_on_launch" {
+  default = true
+}
+
 variable "dns_host_names" {
   default = true
 }
