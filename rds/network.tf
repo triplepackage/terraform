@@ -47,14 +47,13 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-    count             = "${var.az_count}"
-    cidr_block        = "${cidrsubnet(aws_vpc.default.cidr_block, 8, count.index)}"
-    availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
-    vpc_id = "${aws_vpc.default.id}"
-
-    tags {
-        Name = "Private Subnet"
-    }
+  count                   = "${var.az_count}"
+  cidr_block              = "${cidrsubnet(aws_vpc.default.cidr_block, 8, count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
+  vpc_id                  = "${aws_vpc.default.id}"
+  tags {
+    Name = "Private Subnet"
+  }
 }
 
 resource "aws_db_subnet_group" "rds-subnet" {
@@ -149,6 +148,12 @@ resource "aws_route_table_association" "route_association_private" {
   count          = "${var.az_count}"
   subnet_id      = "${element(aws_subnet.private_subnet.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+}
+
+resource "aws_route_table_association" "route_association_public" {
+  count          = "${var.az_count}"
+  subnet_id      = "${element(aws_subnet.public_subnet.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
 }
 
 resource "aws_route_table_association" "route_association_private_rds" {
@@ -280,7 +285,8 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups = ["${aws_security_group.ecs_tasks.id}"]
-    subnets         = ["${aws_subnet.private_subnet.*.id}"]
+    subnets         = ["${aws_subnet.public_subnet.*.id}"]
+    assign_public_ip = "true"
   }
 
   load_balancer {
