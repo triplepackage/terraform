@@ -58,7 +58,8 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_db_subnet_group" "rds-subnet" {
     description = "RDS subnet group"
-    subnet_ids = ["${aws_subnet.public_subnet_rds.id}", "${aws_subnet.private_subnet_rds.id}"]
+    subnet_ids = ["${aws_subnet.public_subnet.*.id}", "${aws_subnet.private_subnet.*.id}"]
+    depends_on = ["aws_subnet.public_subnet", "aws_subnet.private_subnet"]
     tags = {
       Name = "RDS DB Subnet Group"
     }
