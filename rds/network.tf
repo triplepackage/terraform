@@ -14,25 +14,6 @@ resource "aws_vpc" "default" {
   }
 }
 
-resource "aws_subnet" "public_subnet_rds" {
-  vpc_id                  = "${aws_vpc.default.id}"
-  cidr_block              = "${var.subnet_rds_public_cidr_block}"
-  map_public_ip_on_launch = "${var.map_public_ip}"
-  availability_zone       = "${var.availability_zone_main}"
-  tags = {
-    Name = "RDS Public Subnet"
-  }
-}
-
-resource "aws_subnet" "private_subnet_rds" {
-    vpc_id = "${aws_vpc.default.id}"
-    cidr_block = "${var.subnet_rds_private_cidr_block}"
-    availability_zone = "${var.availability_zone_alternate}"
-    tags {
-        Name = "RDS Private Subnet"
-    }
-}
-
 data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "public_subnet" {
@@ -66,6 +47,7 @@ resource "aws_db_subnet_group" "rds-subnet" {
 }
 
 resource "aws_network_acl" "default" {
+  count         = "${var.az_count}"
   vpc_id = "${aws_vpc.default.id}"
   subnet_ids = ["${element(aws_subnet.public_subnet.*.id, count.index)}"]
 
@@ -102,13 +84,6 @@ resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.default.id}"
   tags {
     Name = "Public VPC Route Table"
-  }
-}
-
-resource "aws_route_table" "private_rds" {
-  vpc_id = "${aws_vpc.default.id}"
-  tags {
-    Name = "Private RDS Route Table"
   }
 }
 
@@ -155,16 +130,6 @@ resource "aws_route_table_association" "route_association_public" {
   count          = "${var.az_count}"
   subnet_id      = "${element(aws_subnet.public_subnet.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
-}
-
-resource "aws_route_table_association" "route_association_private_rds" {
-  subnet_id      = "${aws_subnet.private_subnet_rds.id}"
-  route_table_id = "${aws_route_table.private_rds.id}"
-}
-
-resource "aws_route_table_association" "route_association_public_rds" {
-  subnet_id      = "${aws_subnet.public_subnet_rds.id}"
-  route_table_id = "${aws_route_table.public.id}"
 }
 
 ### Security
