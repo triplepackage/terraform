@@ -69,21 +69,21 @@ resource "aws_network_acl" "default" {
     to_port    = 0
   }
   tags {
-    Name = "Default VPC ACL"
+    Name = "Public ACL"
   }
 }
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
   tags {
-    Name = "Default VPC Internet Gateway"
+    Name = "Default Internet Gateway"
   }
 }
 
 resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.default.id}"
   tags {
-    Name = "Public VPC Route Table"
+    Name = "Public Route Table"
   }
 }
 
