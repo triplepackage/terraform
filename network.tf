@@ -52,7 +52,7 @@ resource "aws_network_acl" "default" {
   subnet_ids = ["${element(aws_subnet.public_subnet.*.id, count.index)}"]
 
   ingress {
-      protocol   = "all"
+    protocol   = "-1"
     rule_no    = 100
     action     = "allow"
     cidr_block = "${var.destination_cidr_block}"
@@ -103,6 +103,7 @@ resource "aws_nat_gateway" "gateway" {
   count         = "${var.az_count}"
   subnet_id     = "${element(aws_subnet.public_subnet.*.id, count.index)}"
   allocation_id = "${element(aws_eip.gateway.*.id, count.index)}"
+  depends_on = ["aws_internet_gateway.default"]
 }
 
 # Create a new route table for the private subnets
