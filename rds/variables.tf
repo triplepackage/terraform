@@ -20,6 +20,10 @@ variable "dns_support" {
   default = true
 }
 
+variable "map_public_ip_on_launch" {
+  default = true
+}
+
 variable "dns_host_names" {
   default = true
 }
@@ -52,6 +56,11 @@ variable "map_public_ip" {
 variable "az_count" {
   description = "Number of AZs to cover in a given AWS region"
   default     = "2"
+}
+
+variable "app_image" {
+  description = "Docker image to run in the ECS cluster"
+  default     = "002609254882.dkr.ecr.us-east-1.amazonaws.com/staging:latest"
 }
 
 variable "app_port" {

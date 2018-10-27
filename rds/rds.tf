@@ -12,7 +12,7 @@ resource "aws_db_instance" "rental-mysql" {
   port                     = 3306
   publicly_accessible      = true
   skip_final_snapshot = true
-  vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}", "${aws_security_group.rental-ecs-restservice.id}"]
+  vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}", "${aws_security_group.ecs_tasks.id}"]
 
   tags{
     Name = "RDS MySql Instance"
