@@ -1,9 +1,8 @@
 resource "aws_db_instance" "rental-mysql" {
   allocated_storage    = 10
-  storage_type         = "gp2"
   engine               = "mysql"
   engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
+  instance_class       = "db.t2.small"
   name                 = "rental"
   username             = "root"
   password             = "${var.mysql_password}"

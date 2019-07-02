@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "app" {
   memory                    = "2048"
   container_definitions     = "${data.template_file.task_definition.rendered}"
 
-  depends_on = ["aws_internet_gateway.default"]
+  depends_on = ["aws_internet_gateway.default", "aws_db_instance.rental-mysql"]
 }
 
 resource "aws_ecs_service" "main" {
