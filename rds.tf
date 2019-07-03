@@ -13,6 +13,10 @@ resource "aws_db_instance" "rental-mysql" {
   skip_final_snapshot = true
   vpc_security_group_ids   = ["${aws_security_group.rental-mysql.id}", "${aws_security_group.ecs_tasks.id}"]
 
+  depends_on = [
+    "aws_db_subnet_group.rds-subnet"
+  ]
+
   tags{
     Name = "RDS MySql Instance"
   }
